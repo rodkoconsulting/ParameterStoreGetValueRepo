@@ -10,6 +10,20 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  VpcSubnet:
+    Type: AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>
+    Description: SSM Parameter store key of type StringList with the list of VPC Subnet to be used by Lambda function
+    Default: /sam/vpcSubnetsProd
+  VpcSg:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::SecurityGroup::Id>
+    Description: SSM Parameter store key of type String with the VPC Security Group to be used by Lambda function
+    Default: /sam/vpcSgProd
+  VpcId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>
+    Description: SSM Parameter store key of type String with the VPC Id to be used by Lambda function
+    Default: /sam/vpcProd
+
 Resources:
   ParameterStoreGetValueFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -17,6 +31,11 @@ Resources:
       CodeUri: ParameterStoreGetValue/
       Handler: app.lambda_handler
       Runtime: python3.11
+      VpcConfig:
+        SubnetIds: !Ref VpcSubnet
+        SecurityGroupIds:
+          - !Ref VpcSg
+        VpcId: !Ref VpcId
       Layers:
         - arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:11
       Architectures:
