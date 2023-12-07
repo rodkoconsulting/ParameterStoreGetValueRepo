@@ -21,12 +21,15 @@
                   <option value="IAM" />
                 </list>
               </option>
-              <option name="stackName" value="ParameterStoreGetValueApp" />
+              <option name="stackName" value="ParameterStoreGetValueStack" />
               <option name="tags">
                 <map />
               </option>
               <option name="tempParameterOverrides">
-                <map />
+                <map>
+                  <entry key="VpcSg" value="/sam/vpcSgProd" />
+                  <entry key="VpcSubnet" value="/sam/vpcSubnetsProd" />
+                </map>
               </option>
               <option name="useContainer" value="true" />
             </SyncSamConfig>

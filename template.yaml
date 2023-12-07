@@ -21,10 +21,44 @@ Parameters:
     Default: /sam/vpcSgProd
 
 Resources:
+  ParameterStoreGetValueRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: ParameterStoreGetValuePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                  - ec2:AssignPrivateIpAddresses
+                  - ec2:UnassignPrivateIpAddresses
+                  - ssm:GetParameter
+                Resource: '*'
+      RoleName: ParameterStoreGetValueRole
+
   ParameterStoreGetValueFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ParameterStoreGetValue/
+      Role: !GetAtt ParameterStoreGetValueRole.Arn
+      FunctionName: ParameterStoreGetValueFunction
       Handler: app.lambda_handler
       Runtime: python3.11
       VpcConfig:
@@ -35,15 +69,19 @@ Resources:
         - arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:11
       Architectures:
         - x86_64
+
   ParameterStoreGetValueErrorTopic:
     Type: AWS::SNS::Topic # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      TopicName:  ParameterStoreGetValueErrorTopic
       Subscription:
         - Endpoint: itadmin@polanerselections.com
           Protocol: email
+
   ParameterStoreGetValueAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
+      AlarmName: ParameterStoreGetValueAlarm
       AlarmDescription: Error alarm for ParameterStoreGetValueFunction
       AlarmActions:
         - !Ref ParameterStoreGetValueErrorTopic
@@ -70,6 +108,4 @@ Outputs:
   ParameterStoreGetValueFunction:
     Description: "ParameterStoreGetValue Lambda Function ARN"
     Value: !GetAtt ParameterStoreGetValueFunction.Arn
-  ParameterStoreGetValueFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt ParameterStoreGetValueFunctionRole.Arn
+
