@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  ParameterStoreGetValueApp
+
+  SAM Template for ParameterStoreGetValueApp
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  ParameterStoreGetValueFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ParameterStoreGetValue/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Layers:
+        - arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:11
+      Architectures:
+        - x86_64
+  ParameterStoreGetValueErrorTopic:
+    Type: AWS::SNS::Topic # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Subscription:
+        - Endpoint: itadmin@polanerselections.com
+          Protocol: email
+  ParameterStoreGetValueAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Error alarm for ParameterStoreGetValueFunction
+      AlarmActions:
+        - !Ref ParameterStoreGetValueErrorTopic
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ParameterStoreGetValueFunction
+      Statistic: Sum
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 0
+      Period: 60
+      EvaluationPeriods: 1
+  ParameterStoreGetValueLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ParameterStoreGetValueFunction}
+      RetentionInDays: 7
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  ParameterStoreGetValueFunction:
+    Description: "ParameterStoreGetValue Lambda Function ARN"
+    Value: !GetAtt ParameterStoreGetValueFunction.Arn
+  ParameterStoreGetValueFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt ParameterStoreGetValueFunctionRole.Arn
