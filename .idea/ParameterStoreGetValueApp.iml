@@ -7,4 +7,32 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="syncSettings">
+    <option name="samConfigs">
+      <map>
+        <entry key="template.yaml">
+          <value>
+            <SyncSamConfig>
+              <option name="bucketName" value="polaner-sam-deployment-artifacts" />
+              <option name="enabledCapabilities">
+                <list>
+                  <option value="NAMED_IAM" />
+                  <option value="AUTO_EXPAND" />
+                  <option value="IAM" />
+                </list>
+              </option>
+              <option name="stackName" value="ParameterStoreGetValueApp" />
+              <option name="tags">
+                <map />
+              </option>
+              <option name="tempParameterOverrides">
+                <map />
+              </option>
+              <option name="useContainer" value="true" />
+            </SyncSamConfig>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
 </module>
