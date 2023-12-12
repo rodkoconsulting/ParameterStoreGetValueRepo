@@ -11,7 +11,7 @@
     <option name="requirementsPath" value="" />
   </component>
   <component name="TestRunnerService">
-    <option name="PROJECT_TEST_RUNNER" value="py.test" />
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
   </component>
   <component name="syncSettings">
     <option name="samConfigs">
@@ -28,9 +28,6 @@
                 </list>
               </option>
               <option name="stackName" value="ParameterStoreGetValueStack" />
-              <option name="tags">
-                <map />
-              </option>
               <option name="tempParameterOverrides">
                 <map>
                   <entry key="VpcSg" value="/sam/vpcSgProd" />

@@ -1,0 +1,18 @@
+version = 0.1
+[default.pipeline_bootstrap.parameters]
+pipeline_user = "arn:aws:iam::424371521123:user/arodko"
+permissions_provider = "AWS IAM"
+
+[dev.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::424371521123:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-ZhsYpsXeU52t"
+cloudformation_execution_role = "arn:aws:iam::424371521123:role/service-role/codebuild-ParameterStoreGetValueBuild-service-role"
+artifacts_bucket = "polaner-sam-deployment-artifacts"
+image_repository = ""
+region = "us-east-1"
+
+[prod.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::424371521123:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-ZhsYpsXeU52t"
+cloudformation_execution_role = "arn:aws:iam::424371521123:role/service-role/codebuild-ParameterStoreGetValueBuild-service-role"
+artifacts_bucket = "polaner-sam-deployment-artifacts"
+image_repository = ""
+region = "us-east-1"
