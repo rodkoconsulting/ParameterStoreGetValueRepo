@@ -91,6 +91,9 @@ Parameters:
   FeatureGitBranch:
     Type: String
     Default: ""
+  ManualApprovalNotificationArn:
+    Type: String
+    Default: "arn:aws:sns:us-east-1:424371521123:CodePipelineApproval"
 
 Conditions:
   IsMainBranchPipeline: !Equals [!Ref FeatureGitBranch, ""]
@@ -315,14 +318,27 @@ Resources:
                   Owner: AWS
                   Provider: Manual
                   Version: "1"
+                Configuration:
+                  NotificationArn: !Ref ManualApprovalNotificationArn
                 RunOrder: 1
+              - Name: DeleteTestStack
+                ActionTypeId:
+                  Category: Deploy
+                  Owner: AWS
+                  Provider: CloudFormation
+                  Version: "1"
+                Configuration:
+                  ActionMode: DELETE_ONLY
+                  StackName: !Sub ${TestingStackName}
+                  RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
+                RunOrder: 2
               - Name: DeployProd
                 ActionTypeId:
                   Category: Build
                   Owner: AWS
                   Provider: CodeBuild
                   Version: "1"
-                RunOrder: 2 # keeping run order as 2 in case manual approval is enabled
+                RunOrder: 3 # keeping run order as 2 in case manual approval is enabled
                 Configuration:
                   ProjectName: !Ref CodeBuildProjectDeploy
                   EnvironmentVariables: !Sub |
