@@ -94,6 +94,18 @@ Parameters:
   ManualApprovalNotificationArn:
     Type: String
     Default: "arn:aws:sns:us-east-1:424371521123:CodePipelineApproval"
+  VpcId:
+    Type: String
+    Default: "vpc-0d6712c4bd670aca6"
+  CodeBuildSecurityGroup:
+    Type: String
+    Default: "sg-06f10588fe50e44c4"
+  CodeBuildSubnetPrimary:
+    Type: String
+    Default: "subnet-0d94e42bf9291d974"
+  CodeBuildSubnetSecondary:
+    Type: String
+    Default: "subnet-0c214adc13ccee377"
 
 Conditions:
   IsMainBranchPipeline: !Equals [!Ref FeatureGitBranch, ""]
@@ -613,6 +625,13 @@ Resources:
   CodeBuildProjectUnitTest:
     Type: AWS::CodeBuild::Project
     Properties:
+      VpcConfig:
+        vpcID:  !Ref VpcId
+        SecurityGroupIds:
+          - !Ref CodeBuildSecurityGroup
+        Subnets:
+          - !Ref CodeBuildSubnetPrimary
+          - !Ref CodeBuildSubnetSecondary
       Artifacts:
         Type: CODEPIPELINE
       Environment:
