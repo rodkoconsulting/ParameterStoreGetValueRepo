@@ -320,7 +320,6 @@ Resources:
                   Version: "1"
                 Configuration:
                   NotificationArn: !Ref ManualApprovalNotificationArn
-                  RoleArn: !GetAtt SnsPublishRole.Arn
                 RunOrder: 1
               - Name: DeleteTestStack
                 ActionTypeId:
