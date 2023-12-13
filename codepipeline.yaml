@@ -608,6 +608,10 @@ Resources:
                   - "ec2:DescribeSubnets"
                   - "ec2:DescribeNetworkInterfaces"
                   - "ec2:DeleteNetworkInterface"
+                  - "ec2:CreateNetworkInterface"
+                  - "ec2:CreateNetworkInterfacePermission"
+                  - "ec2:DescribeDhcpOptions"
+                  - "ec2:DescribeVpcs"
                 Resource: "*"
         - PolicyName: CodeBuildArtifactsBucket
           PolicyDocument:
