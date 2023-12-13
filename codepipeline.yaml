@@ -128,6 +128,29 @@ Resources:
                 Action: codepipeline:StartPipelineExecution
                 Resource: !Sub "arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${Pipeline}"
 
+  SnsPublishRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - codpipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        -
+          PolicyName: sns-publish
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: sns:Publish
+                Resource: !Ref ManualApprovalNotificationArn
+
   CloudWatchEventRule:
     Type: AWS::Events::Rule
     Properties:
@@ -320,6 +343,7 @@ Resources:
                   Version: "1"
                 Configuration:
                   NotificationArn: !Ref ManualApprovalNotificationArn
+                  RoleArn: !GetAtt SnsPublishRole.Arn
                 RunOrder: 1
               - Name: DeleteTestStack
                 ActionTypeId:
