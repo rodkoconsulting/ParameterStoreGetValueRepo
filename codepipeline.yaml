@@ -311,7 +311,6 @@ Resources:
           - IsMainBranchPipeline
           - Name: DeployProd
             Actions:
-              # uncomment this to have a manual approval step before deployment to production
               - Name: ManualApproval
                 ActionTypeId:
                   Category: Approval
@@ -330,7 +329,7 @@ Resources:
                 Configuration:
                   ActionMode: DELETE_ONLY
                   StackName: !Sub ${TestingStackName}
-                  RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
+                  RoleArn: !GetAtt CodePipelineExecutionRole.Arn
                 RunOrder: 2
               - Name: DeployProd
                 ActionTypeId:
