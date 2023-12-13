@@ -19,6 +19,11 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::SecurityGroup::Id>
     Description: SSM Parameter store key of type String with the VPC Security Group to be used by Lambda function
     Default: /sam/vpcSgProd
+  Environment:
+    Type: String
+    AllowedValues:
+      - DEV
+      - PROD
 
 Resources:
   ParameterStoreGetValueRole:
@@ -51,14 +56,14 @@ Resources:
                   - ec2:UnassignPrivateIpAddresses
                   - ssm:GetParameter
                 Resource: '*'
-      RoleName: ParameterStoreGetValueRole
+      RoleName: !Sub ParameterStoreGetValueRole_${Environment}
 
   ParameterStoreGetValueFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ParameterStoreGetValue/
       Role: !GetAtt ParameterStoreGetValueRole.Arn
-      FunctionName: ParameterStoreGetValueFunction
+      FunctionName: !Sub ParameterStoreGetValueFunction_${Environment}
       Handler: app.lambda_handler
       Runtime: python3.11
       VpcConfig:
@@ -73,7 +78,7 @@ Resources:
   ParameterStoreGetValueErrorTopic:
     Type: AWS::SNS::Topic # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      TopicName:  ParameterStoreGetValueErrorTopic
+      TopicName:  !Sub ParameterStoreGetValueErrorTopic_${Environment}
       Subscription:
         - Endpoint: itadmin@polanerselections.com
           Protocol: email
@@ -81,7 +86,7 @@ Resources:
   ParameterStoreGetValueAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: ParameterStoreGetValueAlarm
+      AlarmName: !Sub ParameterStoreGetValueAlarm_${Environment}
       AlarmDescription: Error alarm for ParameterStoreGetValueFunction
       AlarmActions:
         - !Ref ParameterStoreGetValueErrorTopic
