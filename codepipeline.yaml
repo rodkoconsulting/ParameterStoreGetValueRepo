@@ -626,7 +626,7 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties:
       VpcConfig:
-        vpcID:  !Ref VpcId
+        VpcId:  !Ref VpcId
         SecurityGroupIds:
           - !Ref CodeBuildSecurityGroup
         Subnets:
