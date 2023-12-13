@@ -329,7 +329,7 @@ Resources:
                 Configuration:
                   ActionMode: DELETE_ONLY
                   StackName: !Sub ${TestingStackName}
-                  RoleArn: !GetAtt CodePipelineExecutionRole.Arn
+                  RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole
                 RunOrder: 2
               - Name: DeployProd
                 ActionTypeId:
