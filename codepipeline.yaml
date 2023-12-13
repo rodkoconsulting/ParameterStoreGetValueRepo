@@ -598,13 +598,14 @@ Resources:
                   - "logs:PutLogEvents"
                 Resource:
                   - !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*"
-        - PolicyName: CodeBuildDescribeSecurityGroups
+        - PolicyName: CodeBuildAccessVpc
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
                   - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeSubnets"
                 Resource: "*"
         - PolicyName: CodeBuildArtifactsBucket
           PolicyDocument:
