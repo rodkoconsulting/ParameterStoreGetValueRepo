@@ -4,7 +4,6 @@ from urllib.request import Request, urlopen
 
 AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
 PARAMETER_STORE_URL = 'http://localhost:2773/systemsmanager/parameters/get?name={parameter_name}&withDecryption=true'
-# comment added to verify Codpipeline functionality
 
 
 def get_parameter_name(event):
