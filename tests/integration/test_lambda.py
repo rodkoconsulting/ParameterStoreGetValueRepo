@@ -2,12 +2,9 @@ import json
 import unittest
 import boto3
 
-from ParameterStoreGetValue import app
-
-
 class TestHandlerCase(unittest.TestCase):
     def test_response(self):
-        print("testing response")
+        print("testing response from lambda function")
         event = {"Name": "/sam/vpcProd"}
         lambda_client = boto3.client('lambda')
         lambda_response = lambda_client.invoke(FunctionName="ParameterStoreGetValueFunction_DEV",
