@@ -613,6 +613,14 @@ Resources:
                   - "ec2:DescribeDhcpOptions"
                   - "ec2:DescribeVpcs"
                 Resource: "*"
+        - PolicyName: CodeBuildLambdaExecution
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: "*"
         - PolicyName: CodeBuildArtifactsBucket
           PolicyDocument:
             Version: "2012-10-17"
