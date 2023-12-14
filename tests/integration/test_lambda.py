@@ -11,7 +11,7 @@ class TestHandlerCase(unittest.TestCase):
                                                InvocationType='RequestResponse', Payload=json.dumps(event))
         result = json.load(lambda_response['Payload'])
         print(result)
-        self.assertEqual(result['body'], "vpc-0d6712c4bd670aca6")
+        self.assertEqual(result, "vpc-0d6712c4bd670aca6")
 
 
 if __name__ == '__main__':
